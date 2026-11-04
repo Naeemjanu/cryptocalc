@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free crypto trading calculator. Estimate position size, margin, stop loss, take profit, profit, loss and risk-to-reward for long and short trades.">
+  <meta name="theme-color" content="#101827">
+  <title>CryptoCalc — Free Crypto Trading Calculator</title>
+  <style>
+    :root{--bg:#0b1220;--panel:#121d30;--panel2:#17243a;--text:#eef4ff;--muted:#9aabc4;--line:#293951;--green:#26d69a;--red:#ff647c;--blue:#79aaff;--gold:#ffc96b}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#182b48 0,transparent 32%),var(--bg);color:var(--text);font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+    .wrap{max-width:1120px;margin:auto;padding:26px 18px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:28px}.brand{font-weight:850;font-size:22px;letter-spacing:-.6px}.brand span{color:var(--green)}.tag{color:var(--muted);font-size:13px}
+    .hero{text-align:center;margin:24px auto 28px;max-width:720px}.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}.hero h1{font-size:clamp(30px,5vw,48px);line-height:1.08;margin:10px 0}.hero p{color:var(--muted);margin:0}
+    .ad{border:1px dashed #41516b;border-radius:12px;min-height:92px;display:flex;align-items:center;justify-content:center;text-align:center;color:#8092ad;font-size:13px;margin:22px 0 26px;padding:12px;background:#0e192a}
+    .layout{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}.card{background:linear-gradient(160deg,var(--panel),#101a2b);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 14px 38px #0002}.card h2{font-size:18px;margin:0 0 18px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:15px}.field label{display:block;color:var(--muted);font-size:13px;margin-bottom:7px}.field input,.field select{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:#0b1525;color:var(--text);font-size:15px;outline:none}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #79aaff20}
+    .toggle{display:flex;gap:8px;background:#0b1525;border:1px solid var(--line);padding:5px;border-radius:12px;margin-bottom:18px}.toggle button{flex:1;border:0;border-radius:8px;padding:10px;background:transparent;color:var(--muted);font-weight:750;cursor:pointer}.toggle button.active.long{background:#164b3d;color:#75f0c3}.toggle button.active.short{background:#552738;color:#ff9bac}
+    .hint{font-size:12px;color:var(--muted);margin-top:-6px;margin-bottom:15px}.results{display:grid;grid-template-columns:1fr 1fr;gap:11px}.metric{background:var(--panel2);border:1px solid #263750;border-radius:13px;padding:14px}.metric small{display:block;color:var(--muted);font-size:12px;margin-bottom:5px}.metric strong{font-size:21px;letter-spacing:-.4px;overflow-wrap:anywhere}.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}.wide{grid-column:1/-1}.bar{height:9px;border-radius:9px;background:#26364e;overflow:hidden;margin-top:10px}.bar>div{height:100%;background:var(--green);width:66.67%;border-radius:9px}.note{font-size:12px;color:var(--muted);margin:16px 0 0}.disclaimer{border-left:3px solid var(--gold);padding:10px 13px;background:#30271955;color:#d9c69f;border-radius:5px;font-size:12px;margin-top:17px}
+    .below{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.how ul{padding-left:19px;color:var(--muted);margin-bottom:0}.how li{margin:7px 0}.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:32px}.footer a{color:var(--blue);text-decoration:none}
+    @media(max-width:760px){.layout,.below{grid-template-columns:1fr}.wrap{padding:18px 13px 42px}.card{padding:18px}.top{margin-bottom:15px}.tag{display:none}}
+    @media(max-width:390px){.row{grid-template-columns:1fr}.results{grid-template-columns:1fr 1fr}.metric strong{font-size:18px}}
+  </style>
+
+  <!-- GOOGLE ANALYTICS: replace G-XXXXXXXXXX with your own GA4 Measurement ID, then uncomment this block. -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  -->
+  <!-- Add AdSense code here only after your AdSense account approves this site. -->
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><div class="brand">₿ <span>Crypto</span>Calc</div><nav><a href="index.html">Calculator</a> · <a href="guides.html">Guides</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a></nav><div class="tag">Free tools for smarter trade planning</div></header>
+  <section class="hero"><div class="eyebrow">Free crypto trading tool</div><h1>Know your risk before you trade.</h1><p>Calculate position size, margin, stop loss, take profit and estimated P&amp;L in seconds.</p></section>
+  <div class="ad" aria-label="Advertisement">Advertisement space — add your approved ad code here</div>
+  <main class="layout">
+    <section class="card">
+      <h2>Trade details</h2>
+      <div class="toggle"><button id="longBtn" class="active long" type="button">LONG</button><button id="shortBtn" type="button">SHORT</button></div>
+      <div class="row">
+        <div class="field"><label for="balance">Account / margin ($)</label><input id="balance" type="number" min="0" step="any" value="10000"></div>
+        <div class="field"><label for="leverage">Leverage (x)</label><input id="leverage" type="number" min="1" max="125" step="any" value="2"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="entry">Entry price ($)</label><input id="entry" type="number" min="0" step="any" value="78000"></div>
+        <div class="field"><label for="stop">Stop-loss price ($)</label><input id="stop" type="number" min="0" step="any" value="77805"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="target">Take-profit price ($)</label><input id="target" type="number" min="0" step="any" value="78390"></div>
+        <div class="field"><label for="risk">Risk per trade (%)</label><input id="risk" type="number" min="0" max="100" step="any" value="0.5"></div>
+      </div>
+      <div class="field"><label for="fee">Trading fee per side (%) — optional</label><input id="fee" type="number" min="0" step="any" value="0.05"></div>
+      <p class="hint">Calculations assume the full entered margin is used. Adjust risk and prices to match your plan.</p>
+    </section>
+    <section class="card">
+      <h2>Your calculation</h2>
+      <div class="results">
+        <div class="metric"><small>Position size</small><strong id="position" class="blue">$20,000.00</strong></div>
+        <div class="metric"><small>Margin used</small><strong id="margin">$10,000.00</strong></div>
+        <div class="metric"><small>Risk budget</small><strong id="riskBudget" class="red">$50.00</strong></div>
+        <div class="metric"><small>Position quantity</small><strong id="quantity">0.256410 BTC</strong></div>
+        <div class="metric"><small>Estimated loss at SL</small><strong id="loss" class="red">-$50.00</strong></div>
+        <div class="metric"><small>Estimated profit at TP</small><strong id="profit" class="green">+$100.00</strong></div>
+        <div class="metric"><small>Risk : Reward</small><strong id="rr" class="blue">1 : 2.00</strong></div>
+        <div class="metric"><small>Stop distance</small><strong id="stopDistance">0.25%</strong></div>
+        <div class="metric wide"><small>Estimated take-profit P&amp;L after simplified round-trip fees</small><strong id="net" class="green">+$80.00</strong></div>
+        <div class="metric wide"><small>Position sizing based on your risk budget</small><strong id="safeSize" class="blue">$20,000.00</strong><div class="bar"><div id="riskBar"></div></div></div>
+      </div>
+      <p class="note" id="status" aria-live="polite">Your planned loss matches your risk budget.</p>
+      <div class="disclaimer">Educational estimate only, not financial advice. Actual results vary with exchange fees, funding, slippage, contract rules and liquidation. Stop-loss orders do not guarantee execution at the exact price.</div>
+    </section>
+  </main>
+  <div class="ad" aria-label="Advertisement">Advertisement space — add your approved ad code here</div>
+  <section class="below">
+    <div class="card how"><h2>How to use this calculator</h2><ul><li>Choose LONG if you expect price to rise, or SHORT if you expect it to fall.</li><li>Enter your available margin and leverage.</li><li>Set your entry, stop-loss and take-profit prices.</li><li>Review estimated loss, profit and risk-to-reward before trading.</li></ul></div>
+    <div class="card how"><h2>Important risk reminder</h2><ul><li>Leverage increases exposure and can cause rapid losses.</li><li>Never risk money you cannot afford to lose.</li><li>Use isolated margin if appropriate for your strategy.</li><li>Check your exchange's liquidation price and fee schedule separately.</li></ul></div>
+  </section>
+  
+  <section class="card how" style="margin-top:18px"><h2>Learn the basics</h2><p>Understand the calculations behind your trade plan with our free educational guides.</p><p><a href="guides.html">Browse crypto trading guides →</a> · <a href="calculator-methodology.html">Read calculator methodology</a></p></section>
+  <footer class="footer">
+    <div>
+      <a href="about.html">About</a> ·
+      <a href="contact.html">Contact</a> ·
+      <a href="privacy.html">Privacy Policy</a> ·
+      <a href="terms.html">Terms</a> ·
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+    <div class="small">© <span id="year"></span> CryptoCalc. Educational use only.</div>
+  </footer>
+
+</div>
+<script>
+(() => {
+  let side = 'LONG';
+  const $ = id => document.getElementById(id);
+  const ids = ['balance','leverage','entry','stop','target','risk','fee'];
+  const money = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const num = id => Number($(id).value);
+  function setSide(s){
+    side=s;
+    $('longBtn').className=s==='LONG'?'active long':'';
+    $('shortBtn').className=s==='SHORT'?'active short':'';
+    calculate();
+  }
+  $('longBtn').addEventListener('click',()=>setSide('LONG'));
+  $('shortBtn').addEventListener('click',()=>setSide('SHORT'));
+  ids.forEach(id=>$(id).addEventListener('input',calculate));
+  function calculate(){
+    const balance=num('balance'), lev=num('leverage'), entry=num('entry'), stop=num('stop'), target=num('target'), riskPct=num('risk'), feePct=num('fee');
+    const valid=[balance,lev,entry,stop,target,riskPct,feePct].every(Number.isFinite)&&balance>0&&lev>0&&entry>0&&stop>0&&target>0&&riskPct>=0&&feePct>=0;
+    if(!valid){$('status').textContent='Please enter valid positive values in all fields.';return;}
+    const position=balance*lev, qty=position/entry, riskBudget=balance*riskPct/100;
+    const stopMove=(side==='LONG'?entry-stop:stop-entry);
+    const targetMove=(side==='LONG'?target-entry:entry-target);
+    const stopValid=stopMove>0, targetValid=targetMove>0;
+    const loss=stopValid?qty*stopMove:0, profit=targetValid?qty*targetMove:0;
+    const rr=loss>0&&targetValid?profit/loss:0;
+    const fees=position*(feePct/100)*2;
+    const net=profit-fees;
+    const pctStop=stopValid?stopMove/entry*100:0;
+    $('position').textContent=money(position);
+    $('margin').textContent=money(balance);
+    $('riskBudget').textContent=money(riskBudget);
+    $('quantity').textContent=qty.toFixed(6)+' units';
+    $('loss').textContent=stopValid?'-'+money(loss):'Invalid SL';
+    $('profit').textContent=targetValid?'+'+money(profit):'Invalid TP';
+    $('rr').textContent=rr>0?'1 : '+rr.toFixed(2):'—';
+    $('stopDistance').textContent=stopValid?pctStop.toFixed(3)+'%':'—';
+    $('net').textContent=targetValid?'+'+money(net):'—';
+    $('net').className=net>=0?'green':'red';
+    const affordable=stopValid&&loss>0?Math.min(position,position*riskBudget/loss):0;
+    $('safeSize').textContent=money(affordable);
+    $('riskBar').style.width=Math.min(100,riskBudget>0?loss/riskBudget*66.67:0)+'%';
+    if(!stopValid||!targetValid){
+      $('status').textContent=side==='LONG'?'For LONG: stop-loss must be below entry and take-profit above entry.':'For SHORT: stop-loss must be above entry and take-profit below entry.';
+    } else if(loss>riskBudget+0.01){
+      $('status').textContent='Warning: estimated stop-loss exceeds your risk budget. Consider reducing position size or tightening the stop.';
+    } else {
+      $('status').textContent='Your planned loss is within your risk budget. Check fees, funding and liquidation on your exchange.';
+    }
+  }
+  $('year').textContent=new Date().getFullYear();
+  calculate();
+})();
+</script>
+</body>
+</html>
